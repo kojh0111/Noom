@@ -19,10 +19,19 @@ const sockets = [];
 
 wss.on("connection", (socket) => {
   sockets.push(socket);
+  socket["nickname"] = "Anon";
   console.log("Connected to Browser ✅");
   socket.on("close", () => console.log("Disconnected from the Browser ❌"));
   socket.on("message", (message) => {
-    sockets.forEach((aSocket) => aSocket.send(message.toString()));
+    const formdata = JSON.parse(message);
+    switch (formdata.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname}: ${formdata.payload}`)
+        );
+      case "nickname":
+        socket["nickname"] = formdata.payload;
+    }
   });
 }); // 여기에서 socket은 연결된 브라우저를 의미
 
