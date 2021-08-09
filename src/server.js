@@ -15,4 +15,6 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app); // http 위에 webSocket을 연결하기 위함
 const wss = new WebSocket.Server({ server }); // wss과 http가 같은 포트에서 실행됨
 
+wss.on("connection", (socket) => console.log(socket)); // 여기에서 socket은 연결된 브라우저를 의미
+
 server.listen(3000, handleListen);
